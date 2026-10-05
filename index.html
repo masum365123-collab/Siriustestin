@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keystone – Property management</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f2f5f6;--panel:#fff;--ink:#14263a;--mute:#5d6f80;--line:#dde4e8;--side:#14263a;--sidetx:#b9c7d3;--acc:#0f8b8d;--acc2:#e9f6f6;--warn:#b45309;--warnbg:#fdf0dc;--bad:#b42318;--badbg:#fde8e6;--ok:#17724a;--okbg:#e2f5ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a26;--panel:#16283a;--ink:#e8eef3;--mute:#8fa2b3;--line:#27405a;--side:#0a131c;--acc:#3cc0c2;--acc2:#12373d;--warn:#f2b45c;--warnbg:#3b2d12;--bad:#f2877c;--badbg:#3d1c19;--ok:#69d19f;--okbg:#12362a}}
+:root[data-theme="dark"]{--bg:#0e1a26;--panel:#16283a;--ink:#e8eef3;--mute:#8fa2b3;--line:#27405a;--side:#0a131c;--acc:#3cc0c2;--acc2:#12373d;--warn:#f2b45c;--warnbg:#3b2d12;--bad:#f2877c;--badbg:#3d1c19;--ok:#69d19f;--okbg:#12362a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Figtree,system-ui,sans-serif;display:flex;min-height:100vh}
+aside{width:232px;background:var(--side);color:var(--sidetx);padding:20px 12px;flex:none;position:sticky;top:0;align-self:flex-start;height:100vh}
+.logo{color:#fff;font-weight:700;font-size:19px;padding:4px 10px 22px}
+.logo b{color:#3cc0c2}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;color:inherit;font:inherit;padding:9px 10px;border-radius:6px;cursor:pointer;margin-bottom:2px}
+nav button:hover{background:rgba(255,255,255,.07)}
+nav button.on{background:var(--acc);color:#fff;font-weight:600}
+nav button:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+main{flex:1;min-width:0;padding:24px 28px}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:24px;margin:0;font-weight:700}
+.tools{display:flex;gap:8px}
+input{font:inherit;padding:8px 12px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);min-width:200px}
+.btn{font:inherit;font-weight:600;padding:8px 14px;border-radius:6px;border:0;background:var(--acc);color:#fff;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.stat small{color:var(--mute);display:block}
+.stat strong{font-size:28px;font-weight:700}
+.stat.alert strong{color:var(--bad)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-bottom:20px}
+.panel h2{font-size:16px;margin:0;padding:14px 16px;border-bottom:1px solid var(--line)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mute);font-weight:500;font-size:13px}
+tr:last-child td{border-bottom:0}
+.tag{padding:2px 9px;border-radius:99px;font-size:13px;font-weight:600}
+.ok{background:var(--okbg);color:var(--ok)}.warn{background:var(--warnbg);color:var(--warn)}.bad{background:var(--badbg);color:var(--bad)}
+.empty{padding:24px 16px;color:var(--mute)}
+.view{display:none}.view.on{display:block}
+@media (max-width:760px){body{flex-direction:column}aside{width:100%;height:auto;position:static;padding:12px}nav{display:flex;gap:4px;overflow-x:auto}nav button{width:auto;white-space:nowrap}.logo{padding-bottom:10px}main{padding:18px 14px}}
+</style>
+</head>
+<body>
+<aside>
+  <div class="logo">Key<b>stone</b></div>
+  <nav aria-label="Main">
+    <button class="on" data-v="dash">Dashboard</button>
+    <button data-v="props">Properties</button>
+    <button data-v="ten">Tenancies</button>
+    <button data-v="maint">Maintenance</button>
+    <button data-v="acc">Accounting</button>
+  </nav>
+</aside>
+<main>
+  <div class="top">
+    <h1 id="title">Dashboard</h1>
+    <div class="tools"><input id="q" type="search" placeholder="Search address or tenant" aria-label="Search"><button class="btn" id="add">Add property</button></div>
+  </div>
+
+  <section class="view on" id="dash">
+    <div class="stats">
+      <div class="stat"><small>Properties</small><strong>48</strong></div>
+      <div class="stat"><small>Occupancy</small><strong>94%</strong></div>
+      <div class="stat alert"><small>Rent overdue</small><strong>£6,420</strong></div>
+      <div class="stat"><small>Open jobs</small><strong>7</strong></div>
+    </div>
+    <div class="panel"><h2>Needs attention</h2><div class="scroll"><table>
+      <tr><th>Item</th><th>Property</th><th>Due</th><th>Status</th></tr>
+      <tr><td>Gas safety certificate</td><td>14 Mill Lane</td><td>12 Oct</td><td><span class="tag warn">Due soon</span></td></tr>
+      <tr><td>Rent arrears (£1,850)</td><td>Flat 3, Orchard House</td><td>Overdue 9 days</td><td><span class="tag bad">Overdue</span></td></tr>
+      <tr><td>Tenancy renewal</td><td>7 Harbour Row</td><td>30 Oct</td><td><span class="tag warn">Due soon</span></td></tr>
+    </table></div></div>
+  </section>
+
+  <section class="view" id="props"><div class="panel"><div class="scroll"><table id="ptab">
+    <thead><tr><th>Address</th><th>Type</th><th>Tenant</th><th>Rent / month</th><th>Status</th></tr></thead><tbody></tbody></table></div></div></section>
+
+  <section class="view" id="ten"><div class="panel"><h2>Active tenancies</h2><div class="scroll"><table>
+    <tr><th>Tenant</th><th>Property</th><th>Ends</th><th>Rent</th></tr>
+    <tr><td>Amira Khan</td><td>14 Mill Lane</td><td>31 Jan 2027</td><td>£1,250</td></tr>
+    <tr><td>Tom Reeves</td><td>Flat 3, Orchard House</td><td>14 Mar 2027</td><td>£1,850</td></tr>
+    <tr><td>Lena Fischer</td><td>7 Harbour Row</td><td>30 Oct 2026</td><td>£980</td></tr>
+  </table></div></div></section>
+
+  <section class="view" id="maint"><div class="panel"><h2>Maintenance jobs</h2><div class="scroll"><table>
+    <tr><th>Job</th><th>Property</th><th>Contractor</th><th>Status</th></tr>
+    <tr><td>Boiler repair</td><td>14 Mill Lane</td><td>Apex Heating</td><td><span class="tag warn">Awaiting quote</span></td></tr>
+    <tr><td>Leaking tap</td><td>7 Harbour Row</td><td>J. Doyle Plumbing</td><td><span class="tag ok">Completed</span></td></tr>
+    <tr><td>Broken window latch</td><td>Flat 3, Orchard House</td><td>Unassigned</td><td><span class="tag bad">Urgent</span></td></tr>
+  </table></div></div></section>
+
+  <section class="view" id="acc"><div class="panel"><h2>Accounting</h2><div class="empty">Rent received this month: £21,340. Connect a bank feed to reconcile payments automatically.</div></div></section>
+</main>
+<script>
+var props=[["14 Mill Lane","House","Amira Khan",1250,"Let"],["Flat 3, Orchard House","Flat","Tom Reeves",1850,"Let"],["7 Harbour Row","Flat","Lena Fischer",980,"Let"],["22 Elm Court","House","—",1400,"Vacant"],["Unit 5, Dock Street","Commercial","Northwind Ltd",3200,"Let"]];
+var tb=document.querySelector("#ptab tbody"),q=document.getElementById("q");
+function draw(){var s=q.value.toLowerCase(),h="";props.forEach(function(p){if((p[0]+p[2]).toLowerCase().indexOf(s)<0)return;h+="<tr><td>"+p[0]+"</td><td>"+p[1]+"</td><td>"+p[2]+"</td><td>£"+p[3].toLocaleString()+"</td><td><span class='tag "+(p[4]=="Let"?"ok":"warn")+"'>"+p[4]+"</span></td></tr>"});tb.innerHTML=h||"<tr><td colspan='5' class='empty'>No properties match. Try a different address or tenant name.</td></tr>"}
+q.oninput=draw;draw();
+var names={dash:"Dashboard",props:"Properties",ten:"Tenancies",maint:"Maintenance",acc:"Accounting"};
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){document.querySelectorAll("nav button,.view").forEach(function(e){e.classList.remove("on")});b.classList.add("on");document.getElementById(b.dataset.v).classList.add("on");document.getElementById("title").textContent=names[b.dataset.v]}});
+document.getElementById("add").onclick=function(){var a=prompt("Property address");if(a){props.unshift([a,"House","—",0,"Vacant"]);draw();document.querySelector('[data-v="props"]').click()}};
+</script>
+</body>
+</html>
